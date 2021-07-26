@@ -1,0 +1,66 @@
+## "#" はコメント
+## "---" はYAMLの区切り線
+---
+## マッピング設定。使い方は後述
+Mappings:
+
+## CFnスタックを作成する際に値を指定するためのParameters
+## CFn管理画面でもParametersのタブがありますのでご確認ください
+Parameters:
+  ## Parametersとして、SystemNameとEnvironmentとCreateSubnetProtectedが定義されている
+  ## SystemNameとして、DescriptionとTypeとDefaultが定義されている
+  SystemName: ##必須
+    ## Descriptionの値は "System Name"
+    Description: System Name
+    ## Typeの値は "String"(文字列)
+    Type: String
+    ## Defaultの値は "awsmaster"
+    Default: awsmaster
+  Environment:
+    Description: Environment
+    Type: String
+    Default: prod
+    ## AllowedValues(指定可能な値)は複数ある
+    ## "-" で縦に並べた項目はlist(配列)。同じ種類の値が並んでいる
+    AllowedValues:
+      - prod
+      - stg
+      - dev
+  CreateSubnetProtected:
+    Description: Create Protected Subnet
+    Type: String
+    Default: true
+    AllowedValues:
+      - true
+      - false
+
+## Parameterの順番を定義するもので、それほど重要ではない
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+
+## テンプレートの中で使うConditions(条件)
+## 条件によってリソースを作る/作らないの切替、値の切替などができる
+Conditions:
+
+## 一番重要なResources
+## このテンプレで作るリソースを定義していきます
+## CFn管理画面でもResourcesのタブがありますのでご確認ください
+Resources:
+  ## EC2::VPC でググる。docs.aws.amazon.com が公式ドキュメント。たいてい一番上 *1
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/19
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: awsmaster-prod-vpc
+
+## 作ったリソースの情報をOutputs(出力)できる
+## CFn管理画面でもOutputsのタブがありますのでご確認ください
+## 別テンプレートでImportValueして参照することができます
+## 使い方は後述
+Outputs:

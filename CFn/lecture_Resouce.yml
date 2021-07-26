@@ -1,0 +1,44 @@
+## EC2::VPC でググる。docs.aws.amazon.com が公式ドキュメント。たいてい一番上 *1
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/19
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: awsmaster-prod-vpc
+
+          ①構文(Syntax) → 全体の構成
+
+# ②プロパティ(Properties) → 必須のプロパティは書く。任意のは書かないとAWSが決めたデフォルト値に
+
+# > CidrBlock
+# >   VPC のプライマリ IPv4 CIDR ブロック。
+# >        (The primary IPv4 CIDR block for the VPC.)
+# >   必須: はい (Required: Yes)
+# >   タイプ: 文字列 (Type: String)
+# >   Update requires: Replacement
+
+# ↑このように説明が書いてある
+# 「必須: はい」のものは必ず書く必要がある
+# 「タイプ」は取り得る値の種類
+# 「Update requires: Replacement」は更新(Update)する場合は
+# 作り直し(Replacement)になるという意味
+
+# > Tags
+# >   VPC のタグ (The tags for the VPC.)
+# >   必須: いいえ (Required: No)
+# >   タイプ: Tag のリスト (Type: List of Tag)
+# >   Update requires: No interruption
+
+# ↑このように「タイプ: ○○のリスト」という場合は "-" で複数並べる
+# 今回はTagがリンク *2 になっているのでクリックすると
+# KeyとValueを定義しないといけないことが分かる
+
+# ③戻り値(Return values) → Ref関数(参照番号)やGetAtt関数で返される値の説明
+# !Ref VPC は VPC ID が返されることが分かる
+
+# ④例(Examples) → 書き方のサンプル。必ずあるわけではない

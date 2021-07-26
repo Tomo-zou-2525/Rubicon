@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Create AWS IAM User, Group
+
+Resources:
+  ## IAM: User
+  UserTestLink: ### [Change Name]
+    Type: AWS::IAM::User
+    Properties:
+      UserName: test.link ### [Change Name]
+      LoginProfile:
+        Password: 123456=NuFuA
+        PasswordResetRequired: true
+      Groups:
+        - !Ref GroupAdministrators
+
+  ## IAM: Group
+  GroupAdministrators:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: Administrators
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+
+Outputs:
+  ## IAM: User
+  UserTestLink: ### [Change Name]
+    Value: !GetAtt UserTestLink.Arn ### [Change Name]
+    Export:
+      Name: !Sub ${AWS::StackName}-UserTestLink ### [Change Name]
+
+  ## IAM: Group
+  GroupAdministrators:
+    Value: !GetAtt GroupAdministrators.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-GroupAdministrators
